@@ -1,7 +1,6 @@
 from django.urls import re_path
-from djangochannelsrestframework.consumers import view_as_consumer
-from . import views
+from . import consumers
 
 websocket_urlpatterns = [
-    re_path(r"ws/court/", view_as_consumer(views.CourtView.as_view())),
+    re_path(r"^ws/court/$", consumers.CourtConsumer.as_asgi()),
 ]

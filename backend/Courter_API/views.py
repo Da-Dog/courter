@@ -18,10 +18,3 @@ class AdminCourtViewset(viewsets.ModelViewSet):
     queryset = models.Court.objects.all()
     serializer_class = serializers.courtSerializer
 
-
-class CourtView(APIView):
-    def get(self, request):
-        court = models.Court.objects.all()
-        serializer = serializers.courtSerializer(court, many=True)
-        return Response(serializer.data)
-

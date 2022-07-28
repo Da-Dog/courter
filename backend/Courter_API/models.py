@@ -23,7 +23,8 @@ class Player(models.Model):
     email = models.EmailField(max_length=100)
     password = models.CharField(max_length=64)
     logged_in = models.BooleanField(default=False)
-    court = models.ForeignKey(Court, on_delete=models.CASCADE, null=True)
+    current_court = models.ForeignKey(Court, on_delete=models.CASCADE, null=True, related_name='current_court')
+    waiting_court = models.ForeignKey(Court, on_delete=models.CASCADE, null=True, related_name='waiting_court')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
