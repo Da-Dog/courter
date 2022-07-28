@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Court(models.Model):
-    number = models.IntegerField()
+    number = models.IntegerField(unique=True)
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     rental_status = models.BooleanField(default=False)
