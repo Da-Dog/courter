@@ -13,7 +13,7 @@ class CourtConsumer(AsyncAPIConsumer):
         await self.model_change.subscribe()
 
     @model_observer(Court)
-    async def model_change(self, **kwargs):
+    async def model_change(self, message, **kwargs):
         data = await self.get_data()
         await self.send_json(data)
 
