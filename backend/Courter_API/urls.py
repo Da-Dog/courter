@@ -12,5 +12,7 @@ urlpatterns = [
     path('auth/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 
     path('players/', views.PlayerView.as_view(), name='players'),
+    path('courts/', views.CourtView.as_view(), name='courts'),
+    path('courts/<int:pk>/', views.UpdateCourtView.as_view(), name='update_court'),
 ]
 urlpatterns += router.urls
