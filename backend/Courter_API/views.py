@@ -49,6 +49,8 @@ class CourtView(APIView):
     def patch(self, request):
         try:
             player = models.Player.objects.get(username=request.data["username"])
+            if player.password != request.data["password"]:
+                return Response({"error": "Invalid password"})
             if player.current_court is not None:
                 court = player.current_court
                 court.current_court.remove(player)
@@ -62,7 +64,7 @@ class CourtView(APIView):
             else:
                 return Response({"error": "Player is not in a court"})
         except KeyError:
-            return Response({"error": "Argument 'username' is required"})
+            return Response({"error": "Argument 'username' and 'password' is required"})
         except models.Player.DoesNotExist:
             return Response({"error": "Player does not exist"})
 
@@ -75,6 +77,8 @@ class UpdateCourtView(APIView):
                 player = models.Player.objects.get(username=request.data['username'])
                 if not player.logged_in:
                     return Response({"error": "Player is not logged in"})
+                if player.password != request.data["password"]:
+                    return Response({"error": "Invalid password"})
                 if player.current_court is not None:
                     current_court = player.current_court
                     current_court.current_court.remove(player)
@@ -99,7 +103,7 @@ class UpdateCourtView(APIView):
                 else:
                     return Response({"error": "Court is currently rented"})
             except KeyError:
-                return Response({"error": "Argument 'username' is required"})
+                return Response({"error": "Argument 'username' and 'password' is required"})
             except models.Player.DoesNotExist:
                 return Response({"error": "Player does not exist"})
         except models.Court.DoesNotExist:
