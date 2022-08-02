@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from . import models
 from . import serializers
 
+from datetime import datetime, timedelta
+
 
 # Create your views here.
 class AdminPlayerViewset(viewsets.ModelViewSet):
@@ -53,6 +55,8 @@ class CourtView(APIView):
                 return Response({"error": "Invalid password"})
             if player.current_court is not None:
                 court = player.current_court
+                if court.start_time and court.start_time + timedelta(minutes=5) < datetime.now():
+                    return Response({"error": f"Court {court.number} had been started, please wait util the session ends"})
                 court.current_court.remove(player)
                 court.save()
                 return Response({"message": f"Player removed from court {court.number}"})
@@ -93,6 +97,10 @@ class UpdateCourtView(APIView):
                         court.save()
                         return Response({"message": f"Joined court {court.number}'s waiting list!"})
                     elif len(court.current_court.all()) > 4:
+                        court.waiting_court.add(player)
+                        court.save()
+                        return Response({"message": f"Joined court {court.number}'s waiting list!"})
+                    elif court.start_time and court.start_time + timedelta(minutes=5) < datetime.now():
                         court.waiting_court.add(player)
                         court.save()
                         return Response({"message": f"Joined court {court.number}'s waiting list!"})
